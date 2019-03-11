@@ -19,19 +19,19 @@ $(document).ready(function() {
         {   question : "What is an Autobot's favorite insect?",
             answers : [ "Bumblebee", "Grasshopper", "Ladybug", "Fly"],
             correctAnswerIndex : 0
-        }
+        },
         {   question : "What does an Autobot use fix a flat?",
             answers : [ "Wrench", "Wheeljack", "Screwdriver", "Fork"],
             correctAnswerIndex : 1
-        }    
+        },    
         {   question : "What did the Autobots see in the desert?",
             answers : [ "Sand", "Camels", "Mirage", "Palm Trees"],
-            correctAnswerIndex : 0
-        }    
+            correctAnswerIndex : 2
+        },    
         {   question : "What is an Autobot's least favorite way to communicate across distances?",
             answers : [ "Smoke Signals", "Telepathy", "Radios", "Soundwave"],
             correctAnswerIndex : 3
-        }
+        },
         {   question : "What is an Autobot's favorite dog?",
         answers : [ "Hound", "Husky", "Pug", "Cat"],
         correctAnswerIndex : 0
@@ -66,12 +66,18 @@ $(document).ready(function() {
         if (time === 0) {
             howManyWrong++;
             var correctAnswer = questions[questionsIndex].correctAnswerIndex;
-            $("#gameScreen").append("<p>The corrrect answer was " + questions[questionsIndex].correctAnswerIndex + "</p>";
-            setTimeout(nextQuestion, 4000);
+            $("#gameScreen").append("<p>The corrrect answer was " + questions[questionsIndex].correctAnswerIndex + "</p>");
+            setTimeout(grabQuestion, 4000);
             questionIndex++;
         }
     }
 
+   function resetGame(){
+        time = 10;
+        questionsIndex = 0;
+        howManyRight = 0;
+        howManyWrong = 0;
+    }
     function grabQuestion(){
         $("#start").hide();
         time = 10;
@@ -92,39 +98,32 @@ $(document).ready(function() {
             for (i = 0; i< questions[questionsIndex].answers.length; i++){
                 $("#gameDisplay").append("<p class='options'>" + questions[questionsIndex].answers[i] + "</p>");
             }
-            //Now the user chooses an answer
-            $("#gameDisplay").on("click", ".options", function() {
-                //we see if the answer chosen matches the number of the right answer.
-                //if the text of the option chosen matches the text of the location of the correct
-                //answer, then....
-                var correctAnswer = questions[questionsIndex].correctAnswerIndex;
-                if ($(this).text() === questions[questionsIndex].answers[correctAnswer]) {
-                    // player wins function
-                    questionsIndex++;
-                    howManyRight++;
-                    $("#gameDisplay").html("<h2> Correct! </h2>")
-                    setTimeout(grabQuestion, 2000);
-                }
-                //if they choose the wrong answer
-                else {
-                    questionsIndex++;
-                    howManyWrong++;
-                    $("#gameDisplay").html("<h2> Wrong! </h2>")
-                    setTimeout(grabQuestion, 2000);
-                }
-            });
+
         }
     }
 
-    function resetGame(){
-        time = 10;
-        questionsIndex = 0;
-        howManyRight = 0;
-        howManyWrong = 0;
-    }
-
     $("#start").click(grabQuestion);       
-
+    //Now the user chooses an answer
+    $("#gameDisplay").on("click", ".options", function() {
+    //we see if the answer chosen matches the number of the right answer.
+    //if the text of the option chosen matches the text of the location of the correct
+    //answer, then....
+        var correctAnswer = questions[questionsIndex].correctAnswerIndex;
+        // player wins 
+        if ($(this).text() === questions[questionsIndex].answers[correctAnswer]) {
+            questionsIndex++;
+            howManyRight++;
+            $("#gameDisplay").html("<h2> Correct! </h2>")
+            setTimeout(grabQuestion, 2000);
+        }
+        //if they choose the wrong answer
+        else {
+            questionsIndex++;
+            howManyWrong++;
+            $("#gameDisplay").html("<h2> Wrong! </h2>")
+            setTimeout(grabQuestion, 2000);
+            }
+    });
 });
 
 
