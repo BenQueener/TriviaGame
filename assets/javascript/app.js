@@ -19,7 +19,54 @@ var questions = [
         answers : [ "Bumblebee", "Grasshopper", "Ladybug", "Fly"],
         correctAnswerIndex : 0
     }
+    {   question : "What does an Autobot use fix a flat?",
+        answers : [ "Wrench", "Wheeljack", "Screwdriver", "Fork"],
+        correctAnswerIndex : 1
+    }    
+    {   question : "What did the Autobots see in the desert?",
+        answers : [ "Sand", "Camels", "Mirage", "Palm Trees"],
+        correctAnswerIndex : 0
+    }    
+    {   question : "What is an Autobot's least favorite way to communicate across distances?",
+        answers : [ "Smoke Signals", "Telepathy", "Radios", "Soundwave"],
+        correctAnswerIndex : 3
+    }
+    {   question : "What is an Autobot's favorite dog?",
+    answers : [ "Hound", "Husky", "Pug", "Cat"],
+    correctAnswerIndex : 0
+    }
 ];	
+
+//Make an instance of a timer that counts down and updates screen every second
+//If the time runs down to zero it clears the timer and does whatever happens 
+//in the game when the time runs out.
+function timer() {
+  counter=setInterval(startTimer, 1000); //1000 will  run it every 1 second
+  function startTimer(){
+ 
+  if (count <= 0){
+     clearInterval(counter);
+     answerTimeout();
+  }
+  if (time > 0){
+     time=time-1;  
+  }
+  $("#gameDisplay").html("<p> Time Remaining: <span id='timer'>" + time + "</span> seconds </p>");
+}
+//If the user doesn't answer the question in time it updates the user, 
+//adds to the incorrect guesses,
+//lets the user know which guess was correct by looking it up in the data object
+//maybe show an image of the right answer if we have time to do that...
+//increase the question counter
+//starts a new question and resets the timeout
+function answerTimeout(){
+    if (time === 0) {
+        howManyWrong++;
+        var correctAnswer = questions[questionsIndex].correctAnswerIndex;
+        $("#gameScreen").append("<p>The corrrect answer was " + questions[questionsIndex].correctAnswerIndex + "</p>";
+        setTimeout(nextQuestion, 4000);
+        questionIndex++;
+}
 
 function grabQuestion(){
     //if we don't have any more questions
@@ -103,20 +150,11 @@ $(document).ready(function() {
 // If they guess wrong, essentially do everything the same as if they win
 
 
-//If the user doesn't answer the question in time it updates the user, 
-//adds to the incorrect guesses,
-//lets the user know which guess was correct by looking it up in the data object
-//maybe show an image of the right answer if we have time to do that...
-//increase the question counter
-//starts a new question and resets the timeout
+
 
 //when the game is over, show the stats, then reset the game and let them start again
 
-//Make a timer
-// game clock currently set to 15 seconds
-//Make an instance of a timer that counts down and updates screen every second
-//If the time runs down to zero it clears the timer and does whatever happens 
-//in the game when the time runs out.
+
 
 //Serve up the next question and start the clocks
 // moves question counter forward to show next question
