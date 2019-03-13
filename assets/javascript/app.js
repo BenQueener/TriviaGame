@@ -37,6 +37,8 @@ $(document).ready(function() {
         correctAnswerIndex : 0
         }
     ];	
+    
+    var pictures = ["assets/images/Jazz.jpg","assets/images/cosmos.jpg","assets/images/bumblebee.jpg", "assets/images/wheeljack.jpg","assets/images/mirage.jpg", "assets/images/soundwave.jpg", "assets/images/hound.jpg"]
 
     //Make an instance of a timer that counts down and updates screen every second
     //If the time runs down to zero it clears the timer and does whatever happens 
@@ -45,12 +47,12 @@ $(document).ready(function() {
         counter=setInterval(startTimer, 1000); //1000 will  run it every 1 second
         function startTimer(){
         
-        if (count <= 0){
+        if (time <= 0){
             clearInterval(counter);
             answerTimeout();
         }
         if (time > 0){
-            time=time-1;  
+            time--;  
         }
         //took out the reference to gameDisplay, pointed it to the timer span
         $("#timer").html( time );
@@ -66,13 +68,14 @@ $(document).ready(function() {
         if (time === 0) {
             howManyWrong++;
             var correctAnswer = questions[questionsIndex].correctAnswerIndex;
-            $("#gameScreen").append("<p>The corrrect answer was " + questions[questionsIndex].correctAnswerIndex + "</p>");
-            setTimeout(grabQuestion, 4000);
-            questionIndex++;
+            $("#gameDisplay").append("<p>The correct answer was " + questions[questionsIndex].answers[questions[questionsIndex].correctAnswerIndex] + "</p>");
+            $("#gameDisplay").append("<img  src=" + pictures[questionsIndex] +">");
+            questionsIndex++;
+            setTimeout(grabQuestion, 3000);
         }
     }
 
-   function resetGame(){
+    function resetGame(){
         time = 10;
         questionsIndex = 0;
         howManyRight = 0;
@@ -80,7 +83,7 @@ $(document).ready(function() {
     }
     function grabQuestion(){
         $("#start").hide();
-        time = 10;
+        
         //if we don't have any more questions
         if (questionsIndex === questions.length){
             //show the stats
@@ -91,6 +94,10 @@ $(document).ready(function() {
             $("#start").click(grabQuestion);
         }
         else {
+            //initialize the timers
+            time = 3;
+            timer();
+            answerTimeout();
             //display the question
             $("#gameDisplay").html("<p> Time Remaining: <span id='timer'>" + time + "</span> seconds </p>");
             $("#gameDisplay").append("<p>" + questions[questionsIndex].question + "</p>");
@@ -98,7 +105,6 @@ $(document).ready(function() {
             for (i = 0; i< questions[questionsIndex].answers.length; i++){
                 $("#gameDisplay").append("<p class='options'>" + questions[questionsIndex].answers[i] + "</p>");
             }
-
         }
     }
 
@@ -113,58 +119,24 @@ $(document).ready(function() {
         if ($(this).text() === questions[questionsIndex].answers[correctAnswer]) {
             questionsIndex++;
             howManyRight++;
+            clearInterval(counter);
             $("#gameDisplay").html("<h2> Correct! </h2>")
+            $("#gameDisplay").append("<p>The correct answer was " + questions[questionsIndex-1].answers[questions[questionsIndex-1].correctAnswerIndex] + "</p>");
+            $("#gameDisplay").append("<img  src=" + pictures[questionsIndex-1] +">");
             setTimeout(grabQuestion, 2000);
         }
         //if they choose the wrong answer
         else {
-            questionsIndex++;
+           
             howManyWrong++;
+            clearInterval(counter);
             $("#gameDisplay").html("<h2> Wrong! </h2>")
+            var correctAnswer = questions[questionsIndex].correctAnswerIndex; 
+            questionsIndex++;
+            $("#gameDisplay").append("<p>The correct answer was " + questions[questionsIndex-1].answers[questions[questionsIndex-1].correctAnswerIndex] + "</p>");
+            $("#gameDisplay").append("<img  src=" + pictures[questionsIndex-1] +">");
             setTimeout(grabQuestion, 2000);
             }
     });
 });
 
-
-//When we start the game by clicking the start button
-//Then we hide the start button and replace it with the countdown clock
-//then we grab a question from the data object and start the countdown
-
-
-//Dig up a question from our data object and append each of the choices to the game screen 
-// loop through all the possible choices 
-
-// What do do if the user guessed correctly
-// update the display, add to the correct guesses, display the correct answer
-// increase the index of the question asked then start a new question ()    
-
-// If they guess wrong, essentially do everything the same as if they win
-
-
-
-
-//when the game is over, show the stats, then reset the game and let them start again
-
-
-
-//Serve up the next question and start the clocks
-// moves question counter forward to show next question
-//We are going tocheck and make sure we are not out of questions.
-//We'll do that by checking the questioncounter and making sure that we are not at the last one
-//If we are at the last question we will show the results of the game.
-//If we still have questions left, we will start the clock at 15 seconds
-//Then we will display the timer on the #gameScreen
-//We will pull the new question, start the timer and start the userTimeout
-
-//If we reset the game we restart the glabal variables
-
-
-
-
-
-// when one of the choices on you gets clicked on the game display
-//set the guess to the text of whatever was clicked...
-//Look in your data object and see if the text you choose matches the right answer...
-//if the answers match, clear the clock and add a win,
-//otherwise clear the clock and add a loss

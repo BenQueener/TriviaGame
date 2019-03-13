@@ -1,0 +1,16 @@
+.bg 
+{
+  background-repeat: no-repeat;
+  background-position: center top;
+  background-attachment: fixed;
+  background-image:  "url('assets/images/tf.jpg')";
+}
+
+body {
+    font-family: 'Orbitron', sans-serif;
+    color: rgb(5, 189, 14);
+    font-weight: Bold;
+    font-display :center;
+    background-color: #cccccc;
+    background-image: linear-gradient(red, yellow);
+}
